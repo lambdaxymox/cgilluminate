@@ -83,6 +83,7 @@ impl<S> fmt::Display for DeltaAttitude<S> where S: fmt::Display {
     }
 }
 
+#[derive(Clone,)]
 pub struct PointLightModelSpec<S> {
     pub ambient: Vector3<S>,
     pub diffuse: Vector3<S>,
@@ -115,7 +116,7 @@ pub struct PointLightModel<S> {
 impl<S> IlluminationModel for PointLightModel<S> 
     where S: ScalarFloat
 {
-    type Spec = PointLightModelSpec<S>;
+    type Spec = PointLightModel<S>;
 
     #[inline]
     fn from_spec(spec: &Self::Spec) -> Self {
@@ -184,6 +185,7 @@ pub struct SpotLightModel<S> {
 impl<S> IlluminationModel for SpotLightModel<S> where S: ScalarFloat {
     type Spec = SpotLightModelSpec<S>;
 
+    #[inline]
     fn from_spec(spec: &Self::Spec) -> Self {
         SpotLightModel {
             cutoff: spec.cutoff,
@@ -351,6 +353,7 @@ impl<S, M> Light<S, M>
 
     /// Update the camera's attitude (i.e. position and orientation) in
     /// world space.
+    #[inline]
     pub fn update(&mut self, delta_attitude: &DeltaAttitude<S>) {
         self.attitude.update(delta_attitude);
     }
