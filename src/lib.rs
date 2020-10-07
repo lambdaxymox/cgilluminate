@@ -5,7 +5,6 @@ use cglinalg::{
     InvertibleSquareMatrix,
     Quaternion,
     Radians,
-    Degrees,
     ScalarFloat,
     Unit,
     Zero,
@@ -38,22 +37,22 @@ pub struct DeltaAttitude<S> {
     /// The change in the position of the light.
     pub delta_position: Vector3<S>,
     /// The change in the orientation of the light about the **negative z-axis**.
-    pub roll: S,
+    pub roll: Radians<S>,
     /// The change in the orientation of the light about the **positive y-axis**.
-    pub yaw: S,
+    pub yaw: Radians<S>,
     /// The change in the orientation of the light about the **positive x-axis**.
-    pub pitch: S,
+    pub pitch: Radians<S>,
 }
 
 impl<S> DeltaAttitude<S> where S: ScalarFloat {
     /// Construct a new change in attitude.
     #[inline]
-    pub fn new(delta_position: Vector3<S>, roll: S, yaw: S, pitch: S) -> Self {
+    pub fn new<A: Into<Radians<S>>>(delta_position: Vector3<S>, roll: A, yaw: A, pitch: A) -> Self {
         Self {
             delta_position: delta_position,
-            roll: roll,
-            yaw: yaw,
-            pitch: pitch,
+            roll: roll.into(),
+            yaw: yaw.into(),
+            pitch: pitch.into(),
         }
     }
 
@@ -62,9 +61,9 @@ impl<S> DeltaAttitude<S> where S: ScalarFloat {
     pub fn zero() -> Self {
         Self {
             delta_position: Vector3::zero(),
-            roll: S::zero(),
-            yaw: S::zero(),
-            pitch: S::zero(),
+            roll: Radians::zero(),
+            yaw: Radians::zero(),
+            pitch: Radians::zero(),
         }
     }
 }
@@ -351,19 +350,19 @@ impl<S> LightAttitude<S> where S: ScalarFloat {
     fn update_orientation_eye(&mut self, delta_attitude: &DeltaAttitude<S>) {
         let axis_yaw = Unit::from_value(self.up.contract());
         let q_yaw = Quaternion::from_axis_angle(
-            &axis_yaw, Degrees(delta_attitude.yaw)
+            &axis_yaw, delta_attitude.yaw
         );
         self.axis = q_yaw * self.axis;
 
         let axis_pitch = Unit::from_value(self.right.contract());
         let q_pitch = Quaternion::from_axis_angle(
-            &axis_pitch, Degrees(delta_attitude.pitch)
+            &axis_pitch, delta_attitude.pitch
         );
         self.axis = q_pitch * self.axis;
 
         let axis_roll = Unit::from_value(self.forward.contract());
         let q_roll = Quaternion::from_axis_angle(
-            &axis_roll, Degrees(delta_attitude.roll), 
+            &axis_roll, delta_attitude.roll, 
         );
         self.axis = q_roll * self.axis;
 
