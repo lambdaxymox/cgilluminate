@@ -392,5 +392,10 @@ impl<S, M> Light<S, M>
     pub fn rotation_axis(&self) -> Vector3<S> {
         self.attitude.axis.v
     }
+
+    #[inline]
+    pub fn model_matrix(&self) -> Matrix4x4<S> {
+        Matrix4x4::from_affine_translation(&self.position())
+    }
 }
 
