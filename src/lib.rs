@@ -288,7 +288,7 @@ impl<S> LightAttitude<S> where S: ScalarFloat {
     /// Update the light position based on the change in the camera's 
     /// attitude.
     #[inline]
-    fn update_position(&mut self, delta_attitude: &DeltaAttitude<S>) {
+    fn update_position_eye(&mut self, delta_attitude: &DeltaAttitude<S>) {
         self.position += self.forward.contract() * -delta_attitude.delta_position.z;
         self.position += self.up.contract()      *  delta_attitude.delta_position.y;
         self.position += self.right.contract()   *  delta_attitude.delta_position.x;
@@ -296,7 +296,7 @@ impl<S> LightAttitude<S> where S: ScalarFloat {
 
     /// Update the light axes so we can rotate the camera about the new rotation axes.
     #[inline]
-    fn update_orientation(&mut self, delta_attitude: &DeltaAttitude<S>) {
+    fn update_orientation_eye(&mut self, delta_attitude: &DeltaAttitude<S>) {
         let axis_yaw = Unit::from_value(self.up.contract());
         let q_yaw = Quaternion::from_axis_angle(
             &axis_yaw, Degrees(delta_attitude.yaw)
@@ -321,12 +321,17 @@ impl<S> LightAttitude<S> where S: ScalarFloat {
         self.up      = rotation_matrix_inv * Vector4::new(S::zero(), S::one(), S::zero(), S::zero());
     }
 
+    #[inline]
+    fn update_position_world(&mut self, new_position: &Vector3<S>) {
+        self.position = new_position.clone();
+    }
+
     /// Update the light's attitude based on the input change in light 
     /// attitude.
     #[inline]
     fn update(&mut self, delta_attitude: &DeltaAttitude<S>) {
-        self.update_orientation(delta_attitude);
-        self.update_position(delta_attitude);
+        self.update_orientation_eye(delta_attitude);
+        self.update_position_eye(delta_attitude);
     }
 }
 
@@ -351,11 +356,16 @@ impl<S, M> Light<S, M>
         }
     }
 
-    /// Update the camera's attitude (i.e. position and orientation) in
+    /// Update the light's attitude (i.e. position and orientation) in
     /// world space.
     #[inline]
-    pub fn update(&mut self, delta_attitude: &DeltaAttitude<S>) {
+    pub fn update_attitude_eye(&mut self, delta_attitude: &DeltaAttitude<S>) {
         self.attitude.update(delta_attitude);
+    }
+
+    #[inline]
+    pub fn update_position_world(&mut self, new_position: &Vector3<S>) {
+        self.attitude.update_position_world(new_position);
     }
 
     #[inline]
