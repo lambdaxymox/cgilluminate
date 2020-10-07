@@ -116,7 +116,7 @@ pub struct PointLightModel<S> {
 impl<S> IlluminationModel for PointLightModel<S> 
     where S: ScalarFloat
 {
-    type Spec = PointLightModel<S>;
+    type Spec = PointLightModelSpec<S>;
 
     #[inline]
     fn from_spec(spec: &Self::Spec) -> Self {
