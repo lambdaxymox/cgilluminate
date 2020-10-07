@@ -13,6 +13,9 @@ use cglinalg::{
 use core::fmt;
 
 
+pub type PointLight<S> = Light<S, PointLightModel<S>>;
+pub type SpotLight<S> = Light<S, SpotLightModel<S>>;
+
 /// A type with this trait can be used as a lighting model. 
 ///
 /// A lighting model is the model that a light uses to illuminate objects
