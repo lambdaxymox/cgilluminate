@@ -35,13 +35,13 @@ pub trait IlluminationModel {
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub struct DeltaAttitude<S> {
     /// The change in the position of the light.
-    delta_position: Vector3<S>,
+    pub delta_position: Vector3<S>,
     /// The change in the orientation of the light about the **negative z-axis**.
-    roll: S,
+    pub roll: S,
     /// The change in the orientation of the light about the **positive y-axis**.
-    yaw: S,
+    pub yaw: S,
     /// The change in the orientation of the light about the **positive x-axis**.
-    pitch: S,
+    pub pitch: S,
 }
 
 impl<S> DeltaAttitude<S> where S: ScalarFloat {
