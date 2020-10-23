@@ -71,9 +71,9 @@ impl<S> fmt::Display for DeltaAttitude<S> where S: fmt::Display {
         write!(
             formatter,
             "DeltaAttitude [x={}, y={}, z={}, roll={}, yaw={}, pitch={}]",
-            self.delta_position.x, 
-            self.delta_position.y, 
-            self.delta_position.z, 
+            self.delta_position[0], 
+            self.delta_position[1], 
+            self.delta_position[2], 
             self.roll, 
             self.yaw, 
             self.pitch

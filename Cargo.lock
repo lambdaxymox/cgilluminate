@@ -24,8 +24,8 @@ dependencies = [
 
 [[package]]
 name = "cglinalg"
-version = "0.11.9"
-source = "git+https://github.com/lambdaxymox/cglinalg#e2f337c6eb83993f2e9a2c93d87d70d8c54c6dd1"
+version = "0.12.2"
+source = "git+https://github.com/lambdaxymox/cglinalg#2a6fd6d71e0ffc49060b4c4cc3044976d22eb696"
 dependencies = [
  "approx",
  "num-traits",
